@@ -13,7 +13,6 @@ app.get('/',(req, res) => {
 app.use('/proveedores', proveedoresRoutes);
 app.use('/productos', productosRoutes)
 
-
 // se realizara un colback
 app.listen(4000,() => {
     console.log('el nombre del viento');
