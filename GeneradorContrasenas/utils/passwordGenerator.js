@@ -1,28 +1,40 @@
-function generatePassword(length) {
-    const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const lowercase = 'abcdefghijklmnopqrstuvwxyz';
-    const numbers = '0123456789';
-    const symbols = '!@#$%^&*()_+-=[]{}|;:,.<>?';
-    
-    const allChars = uppercase + lowercase + numbers + symbols;
-    let password = '';
-    
-    // Asegurar al menos un carácter de cada tipo
-    password += uppercase[Math.floor(Math.random() * uppercase.length)];
-    password += lowercase[Math.floor(Math.random() * lowercase.length)];
-    password += numbers[Math.floor(Math.random() * numbers.length)];
-    password += symbols[Math.floor(Math.random() * symbols.length)];
-    
-    // Rellenar con caracteres aleatorios
-    for (let i = 4; i < length; i++) {
-      password += allChars[Math.floor(Math.random() * allChars.length)];
-    }
-    
-    // Mezclar la contraseña
-    return password.split('').sort(() => Math.random() - 0.5).join('');
+function generatePassword(options) {
+  const {
+    length,
+    includeLowercase = true,
+    includeUppercase = true,
+    includeNumbers = true,
+    includeSymbols = true,
+    startsWith = ''
+  } = options;
+
+  const lowercase = 'abcdefghijklmnopqrstuvwxyz';
+  const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const numbers = '0123456789';
+  const symbols = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+
+  let allowedChars = '';
+  if (includeLowercase) allowedChars += lowercase;
+  if (includeUppercase) allowedChars += uppercase;
+  if (includeNumbers) allowedChars += numbers;
+  if (includeSymbols) allowedChars += symbols;
+
+  if (allowedChars === '') {
+    throw new Error('Debe seleccionar al menos un tipo de carácter');
   }
-  
-  module.exports = { generatePassword };
+
+  let password = startsWith;
+  const remainingLength = length - startsWith.length;
+
+  for (let i = 0; i < remainingLength; i++) {
+    const randomIndex = Math.floor(Math.random() * allowedChars.length);
+    password += allowedChars[randomIndex];
+  }
+
+  return password;
+}
+
+module.exports = { generatePassword };
 
   //Opcion
 
